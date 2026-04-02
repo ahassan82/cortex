@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  bio       String?
+  skills    String   @default("[]")
+  githubUrl String?
+  avatarUrl String?
+  role      String   @default("developer")
+  score     Int      @default(0)
+  createdAt DateTime @default(now())
+  modules   Module[]
+  purchases Purchase[]
+}
+
+model Module {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  tags        String   @default("[]")
+  type        String
+  technology  String
+  price       Float    @default(0)
+  githubUrl   String?
+  fileUrl     String?
+  status      String   @default("pending")
+  downloads   Int      @default(0)
+  earnings    Float    @default(0)
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  purchases   Purchase[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Purchase {
+  id        String   @id @default(cuid())
+  buyerId   String
+  moduleId  String
+  amount    Float
+  buyer     User     @relation(fields: [buyerId], references: [id])
+  module    Module   @relation(fields: [moduleId], references: [id])
+  createdAt DateTime @default(now())
+}
