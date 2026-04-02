@@ -9,6 +9,8 @@ node_modules/
 # Database
 backend/prisma/*.db
 backend/prisma/*.db-journal
+backend/prisma/**/*.db
+backend/prisma/**/*.db-journal
 
 # Uploads
 backend/uploads/*
